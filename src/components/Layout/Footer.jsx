@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Table2, CodeXml, Globe } from "lucide-react";
+import { Table2 } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -44,20 +44,30 @@ export default function Footer() {
           {/* Social */}
           <div>
             <h4 className="text-white font-medium text-sm mb-3">Connect</h4>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
               <a
-                href="#"
-                className="w-9 h-9 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-excel-green transition-colors"
-                aria-label="GitHub"
+                href="https://github.com/dwilson-coder/excelpractice.git"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm hover:text-white transition-colors"
               >
-                <CodeXml size={16} />
+                GitHub
               </a>
               <a
-                href="#"
-                className="w-9 h-9 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-excel-green transition-colors"
-                aria-label="Twitter"
+                href="https://bsky.app/profile/dwilsoncoder.bsky.social"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm hover:text-white transition-colors"
               >
-                <Globe size={16} />
+                Bluesky
+              </a>
+              <a
+                href="https://www.linkedin.com/in/damion-coder-wilson"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm hover:text-white transition-colors"
+              >
+                LinkedIn
               </a>
             </div>
           </div>
@@ -66,7 +76,16 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs">
-            © {year} ExcelPractice. All rights reserved.
+            © {year} ExcelPractice. Built by{" "}
+            <a
+              href="https://codeboxllc.net/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white transition-colors"
+            >
+              CodeBox LLC
+            </a>
+            . All rights reserved.
           </p>
           <p className="text-xs text-gray-500">
             Built with React, Vite & Tailwind CSS

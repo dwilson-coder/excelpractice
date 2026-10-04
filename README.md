@@ -1,16 +1,54 @@
-# React + Vite
+# ExcelPractice
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+![ExcelPractice banner](https://raw.githubusercontent.com/dwilson-coder/excelpractice/refs/heads/main/og.jpg)
 
-Currently, two official plugins are available:
+ExcelPractice is a browser-based spreadsheet for practicing Excel formulas and data workflows. Edit cells, try formulas, and explore pivot tables without installing Excel or creating an account.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- 50-row by 26-column editable spreadsheet grid
+- Multiple sheets for organizing practice data
+- Formula evaluation for cell references, arithmetic, and ranges
+- Supported functions: `SUM`, `AVERAGE`, `COUNT`, `MAX`, `MIN`, `ROUND`, `VLOOKUP`, and `XLOOKUP`
+- Pivot table configuration with row and column fields, value fields, and aggregation options
+- Keyboard navigation and an interactive ribbon
+- Formula reference with syntax examples
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the Oxlint configuration
+You need Node.js and npm installed.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+git clone https://github.com/dwilson-coder/excelpractice.git
+cd excelpractice
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite in your browser.
+
+## Available Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the local development server |
+| `npm run build` | Build the app for production |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run Oxlint |
+
+## Formula Examples
+
+Enter formulas in a cell or the formula bar:
+
+```text
+=SUM(A1:A10)
+=AVERAGE(B1:B10)
+=VLOOKUP("Alice", A2:D10, 3, FALSE)
+=XLOOKUP("Bob", A2:A10, D2:D10, "Not Found")
+```
+
+The formula reference page in the app includes examples for arithmetic, aggregate functions, lookups, and pivot tables.
+
+## Tech Stack
+
+React, Vite, Tailwind CSS, Zustand, and TanStack Virtual.
