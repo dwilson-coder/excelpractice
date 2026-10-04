@@ -1,0 +1,46 @@
+/* ─── App-level overrides & global element resets ───────────────── */
+
+/* Ensure the root fills the viewport */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Prevent text selection on spreadsheet (except inputs) */
+table,
+th,
+td {
+  -webkit-user-select: none;
+  user-select: none;
+}
+table input,
+td input {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Smooth focus rings for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--excel-green);
+  outline-offset: 1px;
+}
+
+/* Hide focus ring on cells (we use border instead) */
+.cell:focus-visible {
+  outline: none;
+}
+
+/* Print: hide ribbon, show only grid */
+@media print {
+  .ribbon-bar,
+  .formula-bar,
+  .sheet-tab,
+  nav,
+  footer {
+    display: none !important;
+  }
+  .cell {
+    border: 1px solid #ccc !important;
+  }
+}   
