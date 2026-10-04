@@ -50,5 +50,24 @@ Enter formulas in a cell or the formula bar:
 The formula reference page in the app includes examples for arithmetic, aggregate functions, lookups, and pivot tables.
 
 ## Tech Stack
+## Netlify Deployment
+
+The Netlify CLI can create or link the site for local deployment:
+
+```bash
+npx netlify login
+npx netlify init
+npm run build
+npx netlify deploy --no-build --dir=dist
+```
+
+To publish a production deploy manually, add `--prod` to the deploy command.
+
+GitHub Actions runs lint and build checks on pull requests and deploys production when changes are pushed to `main`. Add these repository secrets under **Settings → Secrets and variables → Actions**:
+
+- `NETLIFY_AUTH_TOKEN`: a Netlify personal access token
+- `NETLIFY_SITE_ID`: the site's API ID
+
+## Tech Stack
 
 React, Vite, Tailwind CSS, Zustand, and TanStack Virtual.
