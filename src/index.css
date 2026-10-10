@@ -15,4 +15,5 @@
 
 /* ─── Import project styles ────────────────────────────────────── */
 @import "./styles/globals.css";
-@import "./styles/animations.css";   
+@import "./styles/animations.css";
+@import "./styles/spreadsheet.css";   

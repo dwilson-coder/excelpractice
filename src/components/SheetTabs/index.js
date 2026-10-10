@@ -1,1 +1,1 @@
-export { default as SheetTabs } from "./SheetTabs";   
+export { default } from "./SheetTabs";

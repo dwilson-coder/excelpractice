@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppShell } from "./components/Layout";
-import { Home, Practice, About } from "./pages";
+import { Home, Practice, About, Privacy, Terms } from "./pages";
 
 export default function App() {
   return (
@@ -10,6 +10,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/practice" element={<Practice />} />
           <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route
             path="*"
             element={

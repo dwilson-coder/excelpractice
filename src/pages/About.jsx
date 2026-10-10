@@ -61,12 +61,30 @@ const formulaSections = [
     ],
   },
   {
+    icon: FunctionSquare,
+    title: "Logic & Conditional Functions",
+    formulas: [
+      { syntax: '=IF(A1>=60, "Pass", "Fail")', desc: "Return one value when the test is TRUE, another when FALSE (IFS, IFERROR also work)" },
+      { syntax: "=AND(A1>0, B1<10)  /  =OR(…)  /  =NOT(…)", desc: "Combine tests" },
+      { syntax: '=SUMIF(A1:A9, "East", B1:B9)', desc: "Sum cells that match a condition (also COUNTIF, AVERAGEIF)" },
+      { syntax: '=CONCAT(A1, " ", B1)  /  =TEXT(A1, "0.00")', desc: "Text helpers: LEFT, RIGHT, MID, LEN, UPPER, LOWER, TRIM, SUBSTITUTE…" },
+    ],
+  },
+  {
+    icon: Table2,
+    title: "Output Cell",
+    formulas: [
+      { syntax: "Formula bar → Output cell", desc: "Type SUM(A1:A10) in the formula bar, enter D5 (or a range like D5:D9) in Output cell and press Enter to run it there." },
+      { syntax: "Select cells, then Σ", desc: "AutoSum inserts a formula below the selection (or under the column above the active cell)." },
+    ],
+  },
+  {
     icon: Table2,
     title: "Pivot Tables",
     formulas: [
       {
-        syntax: "Data → Pivot",
-        desc: "Open the pivot panel. Select a row field, optional column field, a value field, and an aggregation (SUM, AVERAGE, COUNT, MAX, MIN).",
+        syntax: "Data → Pivot table…",
+        desc: "Select your data (first row = headers) and open the pivot panel. Select a row field, optional column field, a value field, and an aggregation (SUM, AVERAGE, COUNT, MAX, MIN).",
       },
       {
         syntax: "Example: Rows=Dept, Values=Sales, Agg=SUM",

@@ -1,15 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Pencil } from "lucide-react";
-import { useSheet } from "../../store/useSheet";
+import { useStore } from "../../store";
 
 /**
  * Bottom sheet tab bar with add, remove, rename, and switch.
  * Auto-scrolls to keep the active tab visible.
  */
 export default function SheetTabs() {
-  const { sheets, activeSheetId, addSheet, removeSheet, renameSheet, switchSheet } =
-    useSheet();
+  const sheets = useStore((s) => s.sheets);
+  const activeSheetId = useStore((s) => s.activeSheetId);
+  const addSheet = useStore((s) => s.addSheet);
+  const removeSheet = useStore((s) => s.removeSheet);
+  const renameSheet = useStore((s) => s.renameSheet);
+  const switchSheet = useStore((s) => s.switchSheet);
   const [renamingId, setRenamingId] = useState(null);
   const [renameValue, setRenameValue] = useState("");
   const [confirmRemove, setConfirmRemove] = useState(null);
@@ -86,6 +90,8 @@ export default function SheetTabs() {
                   isActive ? "active" : ""
                 }`}
                 onClick={() => !isRenaming && switchSheet(sheet.id)}
+                role="tab"
+                aria-selected={isActive}
                 onDoubleClick={() => startRename(sheet)}
               >
                 {/* Tab label or rename input */}

@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Outlet, useLocation, Link } from "react-router-dom";
 import { Table2, BookOpen, Sparkles } from "lucide-react";
 import Footer from "./Footer";
+import { CookieConsent } from "../Cookies";
 
 const NAV_ITEMS = [
   { to: "/", label: "Home", icon: Sparkles },
@@ -76,6 +77,7 @@ export default function AppShell() {
 
       {/* ── Footer ── */}
       <Footer />
+      <CookieConsent />
     </div>
   );
 }   

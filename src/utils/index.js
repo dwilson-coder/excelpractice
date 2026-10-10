@@ -1,12 +1,20 @@
+export * from "./constants";
 export {
-  evaluateFormula,
-  parseCellRef,
+  XlError,
+  isError,
+  colToLetters,
+  lettersToCol,
   toCellRef,
-  parseRange,
-  getCellValue,
-  getRangeValues,
+  parseCellRef,
+  parseRangeRef,
+  rangeToA1,
+  tokenize,
+  transformRefs,
+  shiftFormula,
+  adjustForStructure,
+  parseLiteral,
+  createEvaluator,
+  validateFormula,
+  FUNCTION_NAMES,
 } from "./formulaEngine";
-
-export { vlookup } from "./vlookup";
-export { xlookup } from "./xlookup";
-export { buildPivot, getUniqueValues } from "./pivot";   
+export { buildPivot, getUniqueValues } from "./pivot";

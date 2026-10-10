@@ -87,9 +87,17 @@ export default function Footer() {
             </a>
             . All rights reserved.
           </p>
-          <p className="text-xs text-gray-500">
-            Built with React, Vite & Tailwind CSS
-          </p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("xp-open-cookie-settings"))}
+              className="hover:text-white transition-colors underline-offset-2 hover:underline"
+            >
+              Cookie settings
+            </button>
+          </nav>
         </div>
       </div>
     </footer>

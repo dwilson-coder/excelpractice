@@ -14,22 +14,22 @@ const features = [
   {
     icon: Table,
     title: "Spreadsheet Grid",
-    desc: "50 rows × 26 columns with editable cells, row/column headers, and multi-sheet support.",
+    desc: "100 rows × 26 columns (A–Z) with type-to-edit cells, drag-to-resize, multi-cell selection and multiple sheets.",
   },
   {
     icon: FunctionSquare,
     title: "Formula Engine",
-    desc: "Type =SUM, =AVERAGE, =VLOOKUP, =XLOOKUP directly into cells and see results instantly.",
+    desc: "Dozens of functions — SUM, IF, COUNTIF, VLOOKUP, XLOOKUP and more — with an Output cell field to send results anywhere.",
   },
   {
     icon: BarChart3,
     title: "Pivot Tables",
-    desc: "Group, aggregate, and summarize data with a drag-free pivot configuration panel.",
+    desc: "Group, aggregate and summarize data, then drop the pivot into its own sheet. Add charts, conditional formatting and data validation.",
   },
   {
     icon: MousePointerClick,
-    title: "Interactive Ribbon",
-    desc: "A contextual ribbon with Home, Formulas, and Data tabs — just like the real thing.",
+    title: "Excel-style Menus & Privacy",
+    desc: "File, Edit, View, Insert, Format, Data and Tools menus. Opens and saves .xlsx; your data stays in your browser, optionally AES-encrypted.",
   },
 ];
 

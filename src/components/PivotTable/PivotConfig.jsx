@@ -1,37 +1,39 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Settings2, Play, ChevronDown } from "lucide-react";
-import { usePivot } from "../../store/usePivot";
+import { rangeToA1 } from "../../utils/formulaEngine";
+import { useStore } from "../../store";
 import PivotTable from "./PivotTable";
 
 const AGG_OPTIONS = ["SUM", "AVERAGE", "COUNT", "MAX", "MIN"];
 
-export default function PivotConfig({ data, onClose }) {
-  const {
-    isOpen,
-    config,
-    results,
-    setPivotConfig,
-    build,
-    getFields,
-  } = usePivot();
+export default function PivotConfig({ onClose }) {
+  const config = useStore((s) => s.pivot.config);
+  const results = useStore((s) => s.pivot.results);
+  const setPivotConfig = useStore((s) => s.setPivot);
+  const build = useStore((s) => s.buildPivot);
+  const reset = useStore((s) => s.resetPivot);
+  const insertSheet = useStore((s) => s.insertPivotSheet);
+  const sheets = useStore((s) => s.sheets);
+  const anchor = useStore((s) => s.anchor);
+  const focus = useStore((s) => s.focus);
+  const pivotSource = useStore((s) => s.pivotSource);
 
   const [building, setBuilding] = useState(false);
-  const fields = useMemo(() => getFields(data), [data, getFields]);
+  // Source data = current selection, or the block of data around the active cell (first row = field names)
+  const source = useMemo(() => pivotSource(), [pivotSource, sheets, anchor, focus]); // eslint-disable-line react-hooks/exhaustive-deps
+  const fields = source.headers;
 
   const handleBuild = () => {
     if (!config.rows || !config.values) return;
     setBuilding(true);
-    // Small delay for visual feedback
     setTimeout(() => {
-      build(data);
+      build();
       setBuilding(false);
-    }, 300);
+    }, 150);
   };
 
-  const handleReset = () => {
-    setPivotConfig({ rows: "", columns: "", values: "", agg: "SUM" });
-  };
+  const handleReset = () => reset();
 
   return (
     <div className="flex flex-col h-full">
@@ -51,6 +53,9 @@ export default function PivotConfig({ data, onClose }) {
 
       {/* ── Config Panel ── */}
       <div className="p-5 space-y-4 border-b border-gray-200">
+        <p className="text-xs text-gray-500">
+          Source: <strong>{rangeToA1(source.rng)}</strong> · {source.data.length} data row{source.data.length === 1 ? "" : "s"}. Select a range (headers in the first row) to change it.
+        </p>
         {/* Row Field */}
         <div>
           <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">
@@ -162,6 +167,14 @@ export default function PivotConfig({ data, onClose }) {
             <Play size={14} />
             {building ? "Building…" : "Build Pivot"}
           </button>
+          {results && (
+            <button
+              onClick={insertSheet}
+              className="px-4 py-2.5 rounded-lg border border-excel-green text-excel-green text-sm font-medium hover:bg-excel-green-light transition-colors"
+            >
+              Insert as sheet
+            </button>
+          )}
           <button
             onClick={handleReset}
             className="px-4 py-2.5 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors"

@@ -1,84 +1,64 @@
 /**
- * Pivot Table engine
- * Aggregates a dataset by grouping rows and applying an aggregation function.
- *
- * @typedef {Object} PivotConfig
- * @property {string} rows       - column name for row grouping
- * @property {string} columns    - column name for column grouping (optional)
- * @property {string} values     - column name to aggregate
- * @property {string} agg        - "SUM" | "AVERAGE" | "COUNT" | "MAX" | "MIN"
- *
- * @param {Array<Object>} data - array of row objects
- * @param {PivotConfig} config
- * @returns {Object} { headers: string[], rows: Array<Array>, totals: Array }
+ * Pivot engine — groups rows by a field (and optional column field) and aggregates a value field.
+ * @param {Array<Object>} data - row objects keyed by header
+ * @param {{rows:string, columns?:string, values:string, agg?:string}} config
+ * @returns {{ headers: string[], rows: Array<Array>, grandRow: Array }}
  */
+const numsOf = (vals) => vals.map((v) => (typeof v === "number" ? v : Number(v))).filter((n) => typeof n === "number" && !isNaN(n));
 
 const AGGREGATIONS = {
-  SUM: (vals) => vals.reduce((a, b) => a + (Number(b) || 0), 0),
+  SUM: (vals) => numsOf(vals).reduce((a, b) => a + b, 0),
   AVERAGE: (vals) => {
-    const nums = vals.map(Number).filter((n) => !isNaN(n));
-    return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
+    const n = numsOf(vals);
+    return n.length ? n.reduce((a, b) => a + b, 0) / n.length : 0;
   },
-  COUNT: (vals) => vals.length,
-  MAX: (vals) => Math.max(...vals.map(Number).filter((n) => !isNaN(n))),
-  MIN: (vals) => Math.min(...vals.map(Number).filter((n) => !isNaN(n))),
+  COUNT: (vals) => vals.filter((v) => v !== "" && v !== null && v !== undefined).length,
+  MAX: (vals) => {
+    const n = numsOf(vals);
+    return n.length ? Math.max(...n) : 0;
+  },
+  MIN: (vals) => {
+    const n = numsOf(vals);
+    return n.length ? Math.min(...n) : 0;
+  },
 };
 
 export function buildPivot(data, config) {
   const { rows: rowField, columns: colField, values: valueField, agg = "SUM" } = config;
   const aggFn = AGGREGATIONS[agg.toUpperCase()] || AGGREGATIONS.SUM;
-
-  // ── Group data ──
-  const groups = {}; // { rowVal: { colVal: [values] } }
-  const rowKeys = new Set();
+  const groups = new Map();
   const colKeys = new Set();
-
   for (const row of data) {
-    const rKey = row[rowField] ?? "";
-    const cKey = colField ? (row[colField] ?? "") : "Total";
-    rowKeys.add(rKey);
+    const rKey = String(row[rowField] ?? "");
+    const cKey = colField ? String(row[colField] ?? "") : "Total";
     colKeys.add(cKey);
-
-    if (!groups[rKey]) groups[rKey] = {};
-    if (!groups[rKey][cKey]) groups[rKey][cKey] = [];
-    groups[rKey][cKey].push(row[valueField]);
+    if (!groups.has(rKey)) groups.set(rKey, new Map());
+    const g = groups.get(rKey);
+    if (!g.has(cKey)) g.set(cKey, []);
+    g.get(cKey).push(row[valueField]);
   }
-
-  // ── Build output ──
-  const colHeaders = [...colKeys].sort();
-  const headers = ["", ...colHeaders, "Grand Total"];
-
+  const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+  const colHeaders = [...colKeys].sort(collator.compare);
+  const showGrandCol = !!colField;
+  const headers = ["", ...colHeaders, ...(showGrandCol ? ["Grand Total"] : [])];
   const rows = [];
-  const grandTotals = colHeaders.map(() => []); // collect per-column grand totals
-
-  for (const rKey of [...rowKeys].sort()) {
-    const rowOut = [rKey];
-    let rowTotal = [];
-
-    for (const cKey of colHeaders) {
-      const vals = groups[rKey]?.[cKey] || [];
-      rowOut.push(aggFn(vals));
-      rowTotal.push(...vals);
-      grandTotals[colHeaders.indexOf(cKey)].push(...vals);
-    }
-    rowOut.push(aggFn(rowTotal));
-    rows.push(rowOut);
+  const colTotals = colHeaders.map(() => []);
+  for (const rKey of [...groups.keys()].sort(collator.compare)) {
+    const g = groups.get(rKey);
+    const out = [rKey];
+    const rowAll = [];
+    colHeaders.forEach((cKey, i) => {
+      const vals = g.get(cKey) || [];
+      out.push(vals.length ? aggFn(vals) : "");
+      rowAll.push(...vals);
+      colTotals[i].push(...vals);
+    });
+    if (showGrandCol) out.push(aggFn(rowAll));
+    rows.push(out);
   }
-
-  // Grand total row
-  const grandRow = ["Grand Total"];
-  for (const cKey of colHeaders) {
-    grandRow.push(aggFn(grandTotals[colHeaders.indexOf(cKey)]));
-  }
-  const allValues = data.map((d) => d[valueField]);
-  grandRow.push(aggFn(allValues));
-
+  const grandRow = ["Grand Total", ...colTotals.map((v) => aggFn(v))];
+  if (showGrandCol) grandRow.push(aggFn(data.map((d) => d[valueField])));
   return { headers, rows, grandRow };
 }
 
-/**
- * Convenience: get unique values for a field (for dropdowns in UI)
- */
-export function getUniqueValues(data, field) {
-  return [...new Set(data.map((r) => r[field]))].sort();
-}   
+export const getUniqueValues = (data, field) => [...new Set(data.map((r) => r[field]))].sort();
